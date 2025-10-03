@@ -63,8 +63,7 @@ traffic-sign-fastapi-service/
 👤 Batuhan Atılgan
 
 GitHub: batuhanatilgan
-
-🇹🇷 Trafik İşareti Sınıflandırma API (FastAPI & Docker)
+Trafik İşareti Sınıflandırma API (FastAPI & Docker)
 📌 Proje Özeti
 
 Bu proje, eğitilmiş bir trafik işareti sınıflandırma modelinin FastAPI ve Docker kullanılarak nasıl servis edilebileceğini göstermektedir.
