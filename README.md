@@ -1,213 +1,63 @@
-<<<<<<< HEAD
-🚦 Traffic Sign Classification API with FastAPI & Docker
-📌 Project Overview
+🚦 Trafik İşareti Sınıflandırma Servisi - FastAPI
 
-This project demonstrates how to serve a trained traffic sign classification model using FastAPI inside a Docker container.
-The API allows uploading an image of a traffic sign and returns the predicted class in JSON format.
+Bu proje, eğitilmiş bir trafik işareti sınıflandırma modelini FastAPI kullanarak Docker konteynerinde servis eder.
+Servis, yüklenen bir trafik işareti görüntüsünü alır ve sınıflandırma sonucunu JSON formatında döner.
 
-🛠️ Tech Stack
+🎯 Projenin Amacı
 
-Python 3.11
+CNN tabanlı model Google Colab üzerinde eğitildi ve Docker üzerinde FastAPI servisi olarak sunuldu.
 
-FastAPI
+Servis, bir görüntü alır, modeli kullanarak tahmin yapar ve sonucu JSON formatında döner.
 
-TensorFlow / Keras
+Proje, gerçek dünya uygulamalarında ML modellerinin production ortamına taşınmasını göstermektedir.
 
-Docker & Docker Compose
-
-Uvicorn
-
-🚀 How to Run the Project
-1. Clone the Repository
-git clone https://github.com/batuhanatilgan/traffic-sign-fastapi-service.git
-cd traffic-sign-fastapi-service
-
-2. Build the Docker Image
-docker-compose build --no-cache
-
-3. Run the Container
-docker-compose up
-
-4. Access the API
-
-The API will be running at:
-👉 http://localhost:7001
-
-Swagger UI documentation:
-👉 http://localhost:7001/docs
-
-📷 Example Request
-cURL Example
-curl -X POST "http://localhost:7001/predict" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@test_sign.jpg"
-
-Example JSON Response
-{
-  "prediction": "Speed Limit (50km/h)"
-}
-
-📂 Repository Structure
-traffic-sign-fastapi-service/
-│-- src/
-│   ├── app/               # FastAPI application
-│   ├── pred/              # Model loading & prediction logic
-│   └── schemas/           # Pydantic schemas
-│-- Dockerfile
-│-- docker-compose.yml
-│-- requirements.txt
-│-- README.md
-
-🧑‍💻 Author
-
-👤 Batuhan Atılgan
-
-GitHub: batuhanatilgan
-Trafik İşareti Sınıflandırma API (FastAPI & Docker)
-📌 Proje Özeti
-
-Bu proje, eğitilmiş bir trafik işareti sınıflandırma modelinin FastAPI ve Docker kullanılarak nasıl servis edilebileceğini göstermektedir.
-API’ye bir trafik işareti görseli yüklenir ve tahmin sonucu JSON formatında döner.
-
-🛠️ Kullanılan Teknolojiler
+🛠 Kullanılan Teknolojiler
 
 Python 3.11
 
 FastAPI
 
+Uvicorn
+
 TensorFlow / Keras
 
 Docker & Docker Compose
 
-Uvicorn
+Pillow, NumPy
 
-🚀 Projeyi Çalıştırma
-1. Repoyu Klonla
+⚙️ Kurulum ve Çalıştırma
+1️⃣ Reponun klonlanması
 git clone https://github.com/batuhanatilgan/traffic-sign-fastapi-service.git
 cd traffic-sign-fastapi-service
 
-2. Docker İmajını Oluştur
+2️⃣ Docker imajının oluşturulması
 docker-compose build --no-cache
 
-3. Container’ı Başlat
+3️⃣ Servisin başlatılması
 docker-compose up
 
-4. API’ye Erişim
 
-API şu adreste çalışır:
+Servis şu adreste çalışır:
 👉 http://localhost:7001
 
 Swagger UI dokümantasyonu:
 👉 http://localhost:7001/docs
 
-📷 Örnek İstek
-cURL Örneği
-curl -X POST "http://localhost:7001/predict" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@test_sign.jpg"
+🧪 Servisi Test Etme
 
-Örnek JSON Yanıtı
+FastAPI UI üzerinden veya curl ile test edilebilir:
+
+Örnek (cURL):
+curl -X POST "http://localhost:7001/predict" -F "file=@test_sign.jpg"
+
+Örnek JSON Çıktısı:
 {
-  "prediction": "Hız Sınırı (50km/h)"
-}
-
-📂 Repo Yapısı
-traffic-sign-fastapi-service/
-│-- src/
-│   ├── app/               # FastAPI uygulaması
-│   ├── pred/              # Model yükleme & tahmin işlemleri
-│   └── schemas/           # Pydantic şemaları
-│-- Dockerfile
-│-- docker-compose.yml
-│-- requirements.txt
-│-- README.md
-
-🧑‍💻 Yazar
-
-👤 Batuhan Atılgan
-
-GitHub: batuhanatilgan
-=======
-# 🚦 Traffic Sign Classification - FastAPI Service
-
-Bu proje, **trafik işaretlerini sınıflandırmak için eğitilmiş bir derin öğrenme modelini** FastAPI kullanarak Docker konteyner üzerinde servis etmektedir.  
-Servis, yüklenen bir trafik işareti görüntüsünü sınıflandırır ve sonucu **JSON formatında** döner.  
-
----
-
-## 📖 İçindekiler
-- [Projenin Amacı](#projenin-amacı)
-- [Kullanılan Teknolojiler](#kullanılan-teknolojiler)
-- [Kurulum ve Çalıştırma](#kurulum-ve-çalıştırma)
-- [Servisi Test Etme](#servisi-test-etme)
-- [Proje Yapısı](#proje-yapısı)
-- [English Version](#english-version)
-
----
-
-## 🎯 Projenin Amacı
-- Google Colab üzerinde eğitilen CNN tabanlı model, Docker üzerinde FastAPI servisi olarak sunulmaktadır.
-- Servis, bir görüntü alır, modeli kullanarak sınıflandırma yapar ve sonucu JSON formatında döner.
-- Proje, gerçek dünya uygulamalarında **ML modellerinin nasıl production ortamına alınabileceğini** göstermektedir.
-
----
-
-## 🛠 Kullanılan Teknolojiler
-- **Python 3.11**
-- **FastAPI**
-- **Uvicorn**
-- **TensorFlow / PyTorch**
-- **Docker & Docker Compose**
-- **Pillow, NumPy**
-
----
-
-## ⚙️ Kurulum ve Çalıştırma
-
-### 1️⃣ Reponun klonlanması
-```bash
-git clone https://github.com/batuhanatilgan/traffic-sign-fastapi-service.git
-cd traffic-sign-fastapi-service
-```
-
-### 2️⃣ Docker imajının build edilmesi
-```bash
-docker-compose build
-```
-
-### 3️⃣ Servisin başlatılması
-```bash
-docker-compose up
-```
-
-Servis şu adreste çalışır:  
-👉 [http://localhost:7001/docs](http://localhost:7001/docs)
-
----
-
-## 🧪 Servisi Test Etme
-FastAPI arayüzünden veya `curl` komutu ile test edebilirsiniz.
-
-### Örnek (cURL ile):
-```bash
-curl -X POST "http://localhost:7001/predict/tf/" -F "file=@sample_sign.jpg"
-```
-
-### Örnek JSON çıktısı:
-```json
-{
-  "filename": "sample_sign.jpg",
-  "prediction": "Stop Sign",
+  "filename": "test_sign.jpg",
+  "prediction": "Hız Limiti (50km/h)",
   "confidence": 0.98
 }
-```
 
----
-
-## 📂 Proje Yapısı
-```
+📂 Proje Yapısı
 traffic-sign-fastapi-service/
 │── docker-compose.yml
 │── Dockerfile
@@ -217,82 +67,70 @@ traffic-sign-fastapi-service/
 │   ├── pred/
 │   │   ├── tf_pred.py
 │   │   └── models/
-│   │       └── GTSRB_model.h5
+│   │       └── Traffic_signs_model.keras
 │── README.md
-```
 
----
+🌍 English Version
+🚦 Traffic Sign Classification - FastAPI Service
 
-# 🌍 English Version
+This project serves a trained traffic sign classification model using FastAPI inside a Docker container.
+The service accepts an uploaded traffic sign image and returns the classification result in JSON format.
 
-## 🚦 Traffic Sign Classification - FastAPI Service
+🎯 Purpose
 
-This project serves a **deep learning model trained for traffic sign classification** using FastAPI inside a Docker container.  
-The service accepts an uploaded traffic sign image and returns the classification result in **JSON format**.
+A CNN-based model trained in Google Colab is deployed as a FastAPI service inside Docker.
 
----
+The service takes an image, performs classification using the model, and returns a JSON response.
 
-## 🎯 Purpose
-- A CNN-based model trained in Google Colab is deployed as a FastAPI service inside Docker.
-- The service takes an image, performs classification, and returns a JSON response.
-- Demonstrates how to **deploy ML models into production environments**.
+Demonstrates how to deploy ML models into production environments.
 
----
+🛠 Technologies
 
-## 🛠 Technologies
-- **Python 3.11**
-- **FastAPI**
-- **Uvicorn**
-- **TensorFlow / PyTorch**
-- **Docker & Docker Compose**
-- **Pillow, NumPy**
+Python 3.11
 
----
+FastAPI
 
-## ⚙️ Setup & Run
+Uvicorn
 
-### 1️⃣ Clone the repository
-```bash
+TensorFlow / Keras
+
+Docker & Docker Compose
+
+Pillow, NumPy
+
+⚙️ Setup & Run
+1️⃣ Clone the repository
 git clone https://github.com/batuhanatilgan/traffic-sign-fastapi-service.git
 cd traffic-sign-fastapi-service
-```
 
-### 2️⃣ Build the Docker image
-```bash
-docker-compose build
-```
+2️⃣ Build the Docker image
+docker-compose build --no-cache
 
-### 3️⃣ Run the service
-```bash
+3️⃣ Run the service
 docker-compose up
-```
 
-Service runs at:  
-👉 [http://localhost:7001/docs](http://localhost:7001/docs)
 
----
+Service runs at:
+👉 http://localhost:7001
 
-## 🧪 Testing the Service
-You can test via FastAPI UI or using `curl`.
+Swagger UI documentation:
+👉 http://localhost:7001/docs
 
-### Example (with cURL):
-```bash
-curl -X POST "http://localhost:7001/predict/tf/" -F "file=@sample_sign.jpg"
-```
+🧪 Testing the Service
 
-### Example JSON Output:
-```json
+Test via FastAPI UI or using curl:
+
+Example (cURL):
+curl -X POST "http://localhost:7001/predict" -F "file=@test_sign.jpg"
+
+Example JSON Output:
 {
-  "filename": "sample_sign.jpg",
-  "prediction": "Stop Sign",
+  "filename": "test_sign.jpg",
+  "prediction": "Speed Limit (50km/h)",
   "confidence": 0.98
 }
-```
 
----
-
-## 📂 Project Structure
-```
+📂 Project Structure
 traffic-sign-fastapi-service/
 │── docker-compose.yml
 │── Dockerfile
@@ -302,12 +140,9 @@ traffic-sign-fastapi-service/
 │   ├── pred/
 │   │   ├── tf_pred.py
 │   │   └── models/
-│   │       └── GTSRB_model.h5
+│   │       └── Traffic_signs_model.keras
 │── README.md
-```
 
----
 
-✍️ Developed by **Batuhan Atılgan**  
-📧 Contact: staj@diginova.com.tr
->>>>>>> 04c2e68 (Update: merged into app.py,removed main.py, updated configs)
+✍️ Developed by Batuhan Atılgan
+📧 Contact: batuhanatilgan54@gmail.com
