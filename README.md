@@ -1,48 +1,94 @@
-# Build your Backend using FastAPI
+Trafik İşareti Sınıflandırma Servisi (FastAPI & Docker)
+Bu proje, bir Keras/TensorFlow modeli kullanılarak eğitilmiş Trafik İşareti Sınıflandırma Modelini (GTSRB) bir Docker konteyneri içinde FastAPI mikro servisi olarak çalıştırmayı amaçlamaktadır.
 
-## Pre-requisites
-* Python (3.6+)
+Proje yapısı, staj görevi gereksinimlerine uygun olarak ashmibanerjee/img-classifier-fastapi referans deposunun minimalist mimarisi temel alınarak oluşturulmuştur. Depo, çıkarım (inference) için gerekli olan 5 temel bileşeni içermektedir.
 
-## Tutorial
-:pushpin: [A 4 Step Tutorial to Serve an ML Model in Production using FastAPI](https://medium.com/@ashmi_banerjee/4-step-tutorial-to-serve-an-ml-model-in-production-using-fastapi-ee62201b3db3)
-## Running the Code
+🚀 Kurulum ve Çalıştırma
+Projenin yerel olarak başlatılması ve test edilmesi Docker ve Docker Compose ile çok kolaydır.
 
-1. Clone the project
-   * `git clone git@github.com:ashmibanerjee/fastapi-backend.git`
-   * `cd fastapi-backend`
-2. Create virtual environment
-   * `virtualenv venv`
-   * `source venv/bin/activate`
-3. Install dependencies 
-   * `pip3 install -r requirements.txt`
-4. Run the server
-   * `python3 src/main.py`
-5. Server should be running at `http://127.0.0.1:8000/docs`
+Depoyu Klonlayın:
 
-## Testing the End points
+git clone [https://github.com/batuhanatilgan/traffic-sign-fastapi-service](https://github.com/batuhanatilgan/traffic-sign-fastapi-service)
+cd traffic-sign-fastapi-service
 
-### Running Unit Tests
-1. `pytest`
+Servisi Başlatın:
+Modeli içeren Docker imajını oluşturur ve servisi http://localhost:7001 adresinde başlatır.
 
-### Running the performance Tests using Locust
+docker-compose up --build
 
-1. `locust -f tests/performance-tests/locust_test.py 
-`
-2. Tests should appear at `http://127.0.0.1:8089/`
+🛠️ Servis Kullanımı
+Servis başarıyla başladıktan sonra aşağıdaki endpoint'ler üzerinden kullanılabilir:
 
-## Further Readings
+Endpoint
 
-### FastAPI
-* [First Steps - FastAPI (tiangolo.com)](https://fastapi.tiangolo.com/tutorial/first-steps/)
-* [Serving ML easily with FastAPI (slideshare.net)](https://www.slideshare.net/SebastinRamrezMontao/serving-ml-easily-with-fastapi?from_action=save)
-* [Tutorial - User Guide - Intro - FastAPI (tiangolo.com)](https://fastapi.tiangolo.com/tutorial/)
-* [FastAPI - The Good, the bad and the ugly. - DEV Community](https://dev.to/fuadrafid/fastapi-the-good-the-bad-and-the-ugly-20ob)
-* [An Introduction to Python FastAPI – All About Tech (amalgjose.com)](https://amalgjose.com/2021/02/28/an-introduction-to-python-fastapi/)
-* [Build And Host Fast Data Science Applications Using FastAPI | by Farhad Malik | Towards Data Science](https://towardsdatascience.com/build-and-host-fast-data-science-applications-using-fastapi-823be8a1d6a0#:~:text=Netflix%2C%20Uber%2C%20Microsoft%20amongst%20many,on%20standard%20Python%20type%20hints.)
-* [For fast and secure sites | Jamstack](https://jamstack.org/)
-* [An introduction to the JAMstack: the architecture of the modern web](https://www.freecodecamp.org/news/an-introduction-to-the-jamstack-the-architecture-of-the-modern-web-c4a0d128d9ca/)
+Amaç
 
-### Testing
-* [FastAPI - testing (tiangolo.com)](https://fastapi.tiangolo.com/tutorial/testing/)
-* [https://locust.io/](https://locust.io/)
-* [Performance testing FastAPI ML APIs with Locust](https://rubikscode.net/2022/03/21/performance-testing-fastapi-ml-apis-with-locust/)
+Yöntem
+
+/
+
+Sağlık kontrolü (Health Check)
+
+GET
+
+/predict
+
+Görüntü yükleme ve sınıflandırma
+
+POST
+
+/docs
+
+Swagger UI ile interaktif test
+
+GET
+
+Test Adresi: http://localhost:7001/docs
+
+English Documentation
+🚦 Traffic Sign Classification Service (FastAPI & Docker)
+This project aims to deploy a pre-trained Keras/TensorFlow Traffic Sign Classification Model (GTSRB) as a FastAPI microservice running inside a Docker container.
+
+The project structure is built upon the minimalist architecture of the required reference repository (ashmibanerjee/img-classifier-fastapi) to meet the internship assignment's compliance requirements. The repository contains only the 5 core components necessary for model inference.
+
+🚀 Setup and Execution
+Starting and testing the project locally is straightforward using Docker and Docker Compose.
+
+Clone the Repository:
+
+git clone [https://github.com/batuhanatilgan/traffic-sign-fastapi-service](https://github.com/batuhanatilgan/traffic-sign-fastapi-service)
+cd traffic-sign-fastapi-service
+
+Start the Service:
+This command builds the Docker image containing the model and starts the service on http://localhost:7001.
+
+docker-compose up --build
+
+🛠️ Service Usage
+Once the service is successfully running, it can be accessed using the following endpoints:
+
+Endpoint
+
+Purpose
+
+Method
+
+/
+
+Health Check
+
+GET
+
+/predict
+
+Image upload and classification
+
+POST
+
+/docs
+
+Interactive testing with Swagger UI
+
+GET
+
+Testing URL: http://localhost:7001/docs
