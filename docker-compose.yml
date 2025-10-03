@@ -1,9 +1,11 @@
-version: "3.9"  # optional since v1.27.0
+version: '3.8'
+
 services:
-  app:
-    container_name: mycontainer
+  web:
     build: .
     ports:
-      - "8000:8000"
+      - "7001:8000"
+    
     volumes:
-      - .:/src/
+      - .:/code 
+    restart: always
