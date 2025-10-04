@@ -8,12 +8,13 @@ import io
 import os
 
 # -------------------------------------------------------------
-# 1. Sabitler ve Model Yükleme
+# 1. Sabitler ve Model Tanımlamaları
 # -------------------------------------------------------------
 MODEL_PATH = "Traffic_signs_model.keras"
 IMAGE_SIZE = (32, 32)
-MAX_FILE_SIZE = 5 * 1024 * 1024
+MAX_FILE_SIZE = 5 * 1024 * 1024  # Maksimum dosya boyutu: 5 MB
 
+# Trafik işareti sınıf isimleri listesi
 CLASS_NAMES = [
     "Hız Limidi (20km/h)", "Hız Limidi (30km/h)", "Hız Limidi (50km/h)", 
     "Hız Limidi (60km/h)", "Hız Limidi (70km/h)", "Hız Limidi (80km/h)", 
@@ -30,20 +31,15 @@ CLASS_NAMES = [
     "3.5 Ton Üstü Geçme Yasağı Sonu"
 ]
 
-# Modeli yükle
-try:
-    model = load_model(MODEL_PATH, compile=False)
-except Exception as e:
-    raise RuntimeError(
-        f"Model yüklenemedi. {MODEL_PATH} dosyasının mevcut olduğundan emin olun. Hata: {e}"
-    )
+# Model değişkeni global olarak tanımlanır
+model = None
 
 # -------------------------------------------------------------
-# 2. FastAPI Uygulaması
+# 2. FastAPI Uygulama Başlatma ve CORS Ayarları
 # -------------------------------------------------------------
 app = FastAPI(title="Trafik İşareti Sınıflandırma Servisi")
 
-# CORS ayarları
+# CORS yapılandırması: Tüm kaynaklardan erişime izin verir
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
@@ -52,35 +48,54 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Root endpoint (http://localhost:7001/)
+# Uygulama başlatıldığında modeli yükleme
+@app.on_event("startup")
+def load_ml_model():
+    global model
+    try:
+        model = load_model(MODEL_PATH)
+        print("Makine öğrenimi modeli başarıyla yüklendi.")
+    except Exception as e:
+        print(f"Model yüklenirken hata oluştu: {e}")
+        # Hata durumunda uygulama başlatılmadan sonlandırılabilir
+        # raise RuntimeError("Model yüklenemedi.")
+
+# 3. API Uç Noktaları
+
+# Kök Uç Noktası (Root Endpoint)
 @app.get("/")
 async def root():
     return {"message": "Trafik İşareti Sınıflandırma Servisi Çalışıyor 🚦"}
 
-# Predict endpoint
+# Tahmin Uç Noktası (Prediction Endpoint)
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    if model is None:
+        raise HTTPException(status_code=503, detail="Model henüz yüklenmedi veya yüklenirken hata oluştu.")
+        
     try:
         image_bytes = await file.read()
 
+        # Dosya boyutu kontrolü
         if len(image_bytes) > MAX_FILE_SIZE:
             raise HTTPException(
                 status_code=413, 
                 detail=f"Dosya boyutu {MAX_FILE_SIZE / (1024*1024):.0f} MB'dan büyük olamaz."
             )
 
-        # Görüntü işleme
+        # Görüntü ön işleme adımları
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         image = image.resize(IMAGE_SIZE)
         image_array = np.array(image).astype("float32") / 255.0
         processed_image = np.expand_dims(image_array, axis=0)
 
-        # Tahmin
+        # Makine öğrenimi modelinden tahmin alma
         predictions = model.predict(processed_image)
         predicted_index = np.argmax(predictions[0])
         confidence = float(predictions[0][predicted_index])
         predicted_label = CLASS_NAMES[predicted_index]
 
+        # Başarılı tahmin yanıtı
         return JSONResponse(content={
             "status": 200,
             "filename": file.filename,
@@ -89,4 +104,5 @@ async def predict(file: UploadFile = File(...)):
         })
 
     except Exception as e:
+        # Genel hata yakalama ve 500 yanıtı döndürme
         raise HTTPException(status_code=500, detail=f"Tahmin sırasında hata: {e}")
