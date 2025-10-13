@@ -7,10 +7,14 @@ from PIL import Image
 import io
 import os
 
+# -------------------------------------------------------------
+# 1. Constants and Model Definitions
+# -------------------------------------------------------------
 MODEL_PATH = "Traffic_signs_model.keras"
 IMAGE_SIZE = (32, 32)
-MAX_FILE_SIZE = 5 * 1024 * 1024  
+MAX_FILE_SIZE = 5 * 1024 * 1024  # Max file size: 5 MB
 
+# List of traffic sign class names
 CLASS_NAMES = [
     "Hız Limidi (20km/h)", "Hız Limidi (30km/h)", "Hız Limidi (50km/h)",
     "Hız Limidi (60km/h)", "Hız Limidi (70km/h)", "Hız Limidi (80km/h)",
@@ -27,14 +31,19 @@ CLASS_NAMES = [
     "3.5 Ton Üstü Geçme Yasağı Sonu"
 ]
 
-
+# Model variable is defined globally
 model = None
+
+# -------------------------------------------------------------
+# 2. FastAPI App Initialization and CORS Settings
+# -------------------------------------------------------------
 app = FastAPI(
     title="Trafik İşareti Sınıflandırma Servisi",
     description="Bu servis, yüklenen bir trafik işareti görüntüsünü sınıflandırmak için eğitilmiş bir Keras modelini kullanır.",
     version="1.0.0"
 )
 
+# CORS configuration: Allows access from all sources
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -55,6 +64,9 @@ def load_ml_model():
     except Exception as e:
         print(f"Error loading model: {e}")
 
+# -------------------------------------------------------------
+# 3. API Endpoints
+# -------------------------------------------------------------
 @app.get("/", summary="Servis Durum Kontrolü")
 async def root():
     """
@@ -77,25 +89,26 @@ async def predict(
     try:
         image_bytes = await file.read()
 
-        
+        # File size check
         if len(image_bytes) > MAX_FILE_SIZE:
             raise HTTPException(
                 status_code=413, 
                 detail=f"File size cannot be larger than {MAX_FILE_SIZE / (1024*1024):.0f} MB."
             )
 
-       
+        # Image preprocessing steps
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         image = image.resize(IMAGE_SIZE)
         image_array = np.array(image).astype("float32") / 255.0
         processed_image = np.expand_dims(image_array, axis=0)
 
+        # Getting prediction from the machine learning model
         predictions = model.predict(processed_image)
         predicted_index = np.argmax(predictions[0])
         confidence = float(predictions[0][predicted_index])
         predicted_label = CLASS_NAMES[predicted_index]
 
-       
+        # Successful prediction response
         return JSONResponse(content={
             "status": 200,
             "filename": file.filename,
@@ -104,4 +117,6 @@ async def predict(
         })
 
     except Exception as e:
+        # General error handling and returning a 500 response
         raise HTTPException(status_code=500, detail=f"Error during prediction: {e}")
+
